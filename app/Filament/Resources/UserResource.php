@@ -8,9 +8,12 @@ use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Grid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -18,23 +21,29 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput:: make('name') -> required(),
-                TextInput:: make('email') -> email() -> required(),
-                TextInput:: make('password') -> password() -> required() ->revealable() ->minLength(8)
-            ]);
+        ->schema([
+            Grid::make(1)->schema([ // Setting the grid to 1 column
+                TextInput::make('name')->required(),
+                TextInput::make('email')->email()->required(),
+                Select::make('role')->required()->options(User::ROLES)->native(false),
+                TextInput::make('password')->password()->required()->revealable()->minLength(8)->visibleOn('create'),
+            ]),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                //
+                TextColumn:: make('id'),
+                TextColumn:: make('name'),
+                TextColumn:: make('email') ->icon('heroicon-m-envelope'),
+                TextColumn:: make('role')
             ])
             ->filters([
                 //
