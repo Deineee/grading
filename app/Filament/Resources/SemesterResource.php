@@ -16,6 +16,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\Select;
 
 class SemesterResource extends Resource
 {
@@ -32,7 +33,15 @@ class SemesterResource extends Resource
                     TextInput::make('school_id') ->required(),
                     DatePicker::make('start_date') ->native(false) ->displayFormat('d/m/Y') ->required(),
                     DatePicker::make('end_date') ->native(false) ->displayFormat('d/m/Y') ->required(),
-                    Toggle::make('status') ->label('Status')
+                    Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'active' => 'Active',
+                        'inactive' => 'Inactive',
+                        'completed' => 'Completed'
+                    ])
+                    ->visibleOn('edit')
+                    ->native(false),
             ]);
     }
 

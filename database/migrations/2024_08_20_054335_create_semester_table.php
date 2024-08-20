@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('school_id');
             $table->date('start_date');
             $table->date('end_date');
-            $table->enum('status', ['active', 'inactive', 'completed'])->default('inactive');
+            $table->enum('status', ['active', 'inactive', 'completed'])->default('inactive'); 
             $table->timestamps();
         });
+        
     }
 
     /**

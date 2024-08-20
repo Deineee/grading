@@ -39,7 +39,7 @@ class Semester extends Model
         'start_date' => 'date',
         'end_date' => 'date',
     ];
-
+    
     /**
      * Example relationship: A Semester can have many Grades.
      

@@ -5,6 +5,9 @@ namespace App\Filament\Resources\SemesterResource\Pages;
 use App\Filament\Resources\SemesterResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 
 class EditSemester extends EditRecord
 {
@@ -17,12 +20,5 @@ class EditSemester extends EditRecord
         ];
     }
 
-    protected function saveRecord(array $data): void
-    {
-        // Use valid status values
-        $data['status'] = $data['status'] ? 'active' : 'inactive'; // Or adjust as needed
-
-        parent::saveRecord($data);
-    }
-
 }
+
