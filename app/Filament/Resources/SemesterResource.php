@@ -17,6 +17,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Grid;
 
 class SemesterResource extends Resource
 {
@@ -28,6 +29,7 @@ class SemesterResource extends Resource
     {
         return $form
             ->schema([
+                Grid::make(1)->schema([
                     TextInput::make('name')->required(),
                     TextInput::make('school_name') ->required(),
                     TextInput::make('school_id') ->required(),
@@ -42,6 +44,7 @@ class SemesterResource extends Resource
                     ])
                     ->visibleOn('edit')
                     ->native(false),
+                    ]),    
             ]);
     }
 
@@ -49,10 +52,20 @@ class SemesterResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn:: make('name'),
-                TextColumn:: make('school_name'),
-                TextColumn:: make('school_id'),
-                TextColumn::make('status')
+                TextColumn:: make('name')->label('NAME'),
+                TextColumn:: make('school_name')->label('SCHOOL NAME'),
+                TextColumn::make('school_year')
+                ->label('SCHOOL YEAR')
+                ->getStateUsing(function ($record) {
+                    return $record->start_date->format('d/m/Y') . ' - ' . $record->end_date->format('d/m/Y');
+                }),
+                TextColumn:: make('school_id') ->label('SCHOOL ID'),
+                TextColumn::make('status') ->label('STATUS') ->badge()
+                ->colors([
+                    'primary' => 'active',
+                    'secondary' => 'inactive',
+                    'success' => 'completed',
+                ]),
             ])
             ->filters([
                 //

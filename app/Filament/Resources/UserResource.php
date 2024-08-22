@@ -41,9 +41,9 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn:: make('id'),
-                TextColumn:: make('name'),
-                TextColumn:: make('email') ->icon('heroicon-m-envelope'),
-                TextColumn:: make('role')
+                TextColumn:: make('name')->label('NAME'),
+                TextColumn:: make('email') ->icon('heroicon-m-envelope')->label('EMAIL'),
+                TextColumn:: make('role')->label('ROLE')
             ])
             ->filters([
                 //

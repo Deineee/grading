@@ -19,10 +19,10 @@ class SemesterObserver
         // Determine the new status
         $newStatus = 'inactive'; // Default status
 
-        if ($startDate <= $now && $endDate >= $now) {
-            $newStatus = 'active';
-        } elseif ($endDate < $now) {
+        if ($endDate < $now) {
             $newStatus = 'completed';
+        } elseif ($startDate <= $now && $endDate >= $now) {
+            $newStatus = 'active';
         }
 
         // Update the status only if it has changed
@@ -30,7 +30,7 @@ class SemesterObserver
             $semester->status = $newStatus;
             $semester->save();
         }
-    }
+    } 
 
     /**
      * Handle the Semester "created" event.
@@ -38,7 +38,7 @@ class SemesterObserver
     public function created(Semester $semester): void
     {
         $this->updateStatus($semester);
-    }
+    } 
 
     /**
      * Handle the Semester "updated" event.
@@ -46,7 +46,7 @@ class SemesterObserver
     public function updated(Semester $semester): void
     {
         $this->updateStatus($semester);
-    }
+    } 
 
     /**
      * Handle the Semester "deleted" event.
