@@ -28,7 +28,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this -> isAdmin() || $this -> isTeacher();
+        return $this -> isAdmin() || $this -> isTeacher() || $this -> isStudent();
     }
 
     public function isAdmin(){
@@ -37,6 +37,10 @@ class User extends Authenticatable implements FilamentUser
 
     public function isTeacher(){
         return $this -> role === self::ROLE_TEACHER;
+    }
+
+    public function isStudent(){
+        return $this -> role === self::ROLE_STUDENT;
     }
 
     /**
