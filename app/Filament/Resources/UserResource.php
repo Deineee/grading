@@ -27,8 +27,11 @@ class UserResource extends Resource
     {
         return $form
         ->schema([
-            Grid::make(1)->schema([ // Setting the grid to 1 column
-                TextInput::make('name')->required(),
+            Grid::make(2)->schema([ // Setting the grid to 1 column
+                TextInput::make('name')->label('User name')->required(),
+                TextInput::make('first_name')->label('First name')->required(),
+                TextInput::make('middle_name')->label('Middle name')->required(),
+                TextInput::make('last_name')->label('Last name')->required(),
                 TextInput::make('email')->email()->required(),
                 Select::make('role')->required()->options(User::ROLES)->native(false),
                 TextInput::make('password')->password()->required()->revealable()->minLength(8)->visibleOn('create'),
@@ -41,7 +44,9 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn:: make('id'),
-                TextColumn:: make('name')->label('NAME'),
+                TextColumn:: make('name')->label('USER NAME'),
+                TextColumn::make('full_name')
+                ->label('FULL NAME'),
                 TextColumn:: make('email') ->icon('heroicon-m-envelope')->label('EMAIL'),
                 TextColumn:: make('role')->label('ROLE')
             ])
