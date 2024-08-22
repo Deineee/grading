@@ -16,6 +16,8 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\Grid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Radio;
+use App\Enums\UserStatus;
 
 class UserResource extends Resource
 {
@@ -27,13 +29,19 @@ class UserResource extends Resource
     {
         return $form
         ->schema([
-            Grid::make(2)->schema([ // Setting the grid to 1 column
+            Grid::make(1)->schema([ // Setting the grid to 1 column
                 TextInput::make('name')->label('User name')->required(),
                 TextInput::make('first_name')->label('First name')->required(),
                 TextInput::make('middle_name')->label('Middle name')->required(),
                 TextInput::make('last_name')->label('Last name')->required(),
                 TextInput::make('email')->email()->required(),
                 Select::make('role')->required()->options(User::ROLES)->native(false),
+                Radio::make('status')
+                    ->options(array_combine(
+                        array_map(fn(UserStatus $status) => $status->value, UserStatus::cases()),
+                        array_map(fn(UserStatus $status) => $status->getLabel(), UserStatus::cases())
+                    ))
+                    ->required(),
                 TextInput::make('password')->password()->required()->revealable()->minLength(8)->visibleOn('create'),
             ]),
         ]);
@@ -47,7 +55,8 @@ class UserResource extends Resource
                 TextColumn:: make('name')->label('USER NAME'),
                 TextColumn::make('full_name')
                 ->label('FULL NAME'),
-                TextColumn:: make('email') ->icon('heroicon-m-envelope')->label('EMAIL'),
+                TextColumn:: make('email') ->icon('heroicon-m-envelope')->label('EMAIL')->copyable()->copyMessage('Copied!')->copyMessageDuration(1500),
+                TextColumn:: make('status') -> badge(),
                 TextColumn:: make('role')->label('ROLE')
             ])
             ->filters([
@@ -55,10 +64,15 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -77,5 +91,13 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

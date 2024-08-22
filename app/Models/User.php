@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use App\Enums\UserStatus;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -66,6 +67,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'role',
+        'status',
     ];
 
     /**
@@ -86,5 +88,6 @@ class User extends Authenticatable implements FilamentUser
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'status' => UserStatus::class,
     ];
 }
