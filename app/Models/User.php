@@ -11,6 +11,8 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use App\Enums\UserStatus;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Faculty;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -53,6 +55,17 @@ class User extends Authenticatable implements FilamentUser
     public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->middle_name} {$this->last_name}");
+    }
+
+    /**
+     * Scope a query to only include teachers.
+     *
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function scopeTeachers($query)
+    {
+        return $query->where('role', self::ROLE_TEACHER);
     }
 
     /**
