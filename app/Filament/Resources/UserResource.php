@@ -52,12 +52,11 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn:: make('id'),
-                TextColumn:: make('name')->label('USER NAME'),
-                TextColumn::make('full_name')
-                ->label('FULL NAME'),
+                TextColumn:: make('name')->label('USER NAME') -> searchable(),
+                TextColumn::make('full_name')->label('FULL NAME')  ->searchable(['first_name', 'middle_name', 'last_name']), 
                 TextColumn:: make('email') ->icon('heroicon-m-envelope')->label('EMAIL')->copyable()->copyMessage('Copied!')->copyMessageDuration(1500),
                 TextColumn:: make('status') -> badge(),
-                TextColumn:: make('role')->label('ROLE')
+                TextColumn:: make('role')->label('ROLE') -> searchable()
             ])
             ->filters([
                 //

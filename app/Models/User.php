@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use App\Enums\UserStatus;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable implements FilamentUser
 {
