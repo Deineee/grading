@@ -15,6 +15,7 @@ class Faculty extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'full_name',
         'email',
         'status',
         'semester_id',
@@ -41,6 +42,8 @@ class Faculty extends Model
                 $user = User::find($faculty->user_id);
                 if ($user) {
                     $faculty->name = $user->name;
+                    $fullName = trim("{$user->first_name} {$user->middle_name} {$user->last_name}");
+                    $faculty->full_name = $fullName;
                     $faculty->email = $user->email;
                     $faculty->status = $user->status;
                 }

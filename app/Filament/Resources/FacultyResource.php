@@ -30,13 +30,14 @@ class FacultyResource extends Resource
                 Grid::make(1)->schema([ 
                     Select::make('user_id')
                     ->label('Name')
-                    ->required()
+                    ->required() 
+                    ->native(false)
                     ->relationship('user', 'name', function ($query) {
                         $query->teachers();
                     }),
                 ]),
-                Select::make('semester_id') -> label('Semester')->required() ->relationship('semester', 'name',),
-                Select::make('department_id') -> label('Department')->required() ->relationship('department', 'description')
+                Select::make('semester_id') -> label('Semester')->required() ->relationship('semester', 'name',) ->native(false),
+                Select::make('department_id') -> label('Department')->required() ->relationship('department', 'description') ->native(false)
             ]);
     }
 
@@ -45,6 +46,7 @@ class FacultyResource extends Resource
         return $table
             ->columns([
                 TextColumn:: make('name')->label('USER NAME') -> searchable(),
+                TextColumn:: make('full_name')->label('FULL NAME') -> searchable(),
                 TextColumn:: make('email') ->icon('heroicon-m-envelope')->label('EMAIL')->copyable()->copyMessage('Copied!')->copyMessageDuration(1500),
                 TextColumn:: make('status') ->label('STATUS') -> badge(),
                 TextColumn:: make('semester_name')->label('SEMESTER') -> searchable(),
@@ -55,6 +57,7 @@ class FacultyResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
