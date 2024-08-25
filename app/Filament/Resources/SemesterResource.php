@@ -54,14 +54,14 @@ class SemesterResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn:: make('name')->label('NAME'),
-                TextColumn:: make('school_name')->label('SCHOOL NAME'),
+                TextColumn:: make('name')->label('NAME') -> searchable(),
+                TextColumn:: make('school_name')->label('SCHOOL NAME') -> searchable(),
                 TextColumn::make('school_year')
                 ->label('SCHOOL YEAR')
                 ->getStateUsing(function ($record) {
                     return $record->start_date->format('d/m/Y') . ' - ' . $record->end_date->format('d/m/Y');
                 }),
-                TextColumn:: make('school_id') ->label('SCHOOL ID'),
+                TextColumn:: make('school_id') ->label('SCHOOL ID') -> searchable(),
                 TextColumn::make('status') ->label('STATUS') ->badge()
                 ->colors([
                     'primary' => 'active',
@@ -74,6 +74,7 @@ class SemesterResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

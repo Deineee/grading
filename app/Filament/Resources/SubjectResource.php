@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DepartmentResource\Pages;
-use App\Filament\Resources\DepartmentResource\RelationManagers;
-use App\Models\Department;
+use App\Filament\Resources\SubjectResource\Pages;
+use App\Filament\Resources\SubjectResource\RelationManagers;
+use App\Models\Subject;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,41 +13,42 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 
-class DepartmentResource extends Resource
+class SubjectResource extends Resource
 {
-    protected static ?string $model = Department::class;
+    protected static ?string $model = Subject::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
-    protected static ?string $navigationGroup = 'DEPARTMENT SECTION';
-    protected static ?int $navigationSort = 1;
-    
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'STUDENT SECTION';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Grid::make(1)->schema([
-                TextInput::make('department')->required(),
-                TextInput::make('description') ->required(),
-                ]),
+                    TextInput::make('subject_name')->required(),
+                    TextInput::make('subject_description') ->required(),
+                    TextInput::make('subject_code') ->required(),
+                    TextInput::make('credits') ->required() ->numeric()  ->maxValue(10),
+                    ]),
             ]);
+
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn:: make('department')->label('DEPARTMENT')-> searchable(),
-                TextColumn:: make('description')->label('DESCRIPTION')-> searchable(),
+                //
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -66,9 +67,9 @@ class DepartmentResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDepartments::route('/'),
-            'create' => Pages\CreateDepartment::route('/create'),
-            'edit' => Pages\EditDepartment::route('/{record}/edit'),
+            'index' => Pages\ListSubjects::route('/'),
+            'create' => Pages\CreateSubject::route('/create'),
+            'edit' => Pages\EditSubject::route('/{record}/edit'),
         ];
     }
 }
