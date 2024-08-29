@@ -34,6 +34,7 @@ class SubjectResource extends Resource
                 Grid::make(1)->schema([
                     TextInput::make('subject_name')
                         ->label('Subject Name')
+                        ->unique(ignoreRecord: true)
                         ->required(),
                     
                     TextInput::make('subject_code')
@@ -79,8 +80,11 @@ class SubjectResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('subject_name')
-                    ->label('Subject Name')
-                    ->sortable(),
+                    ->label('Subject Name'),
+                
+                TextColumn::make('user.full_name')
+                    ->label('Teacher')
+                    ->searchable(),
 
                 TextColumn::make('subject_code')
                     ->label('Subject Code')
@@ -95,8 +99,7 @@ class SubjectResource extends Resource
                     ->getStateUsing(function ($record) {
                         // Fetch the prerequisite subjects related to the current subject
                         return $record->prerequisites->pluck('subject_name')->join(', ');
-                    })
-                    ->sortable(),
+                    }),
                 
             ])
             ->filters([
