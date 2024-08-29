@@ -42,7 +42,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 'DEPARTMENT SECTION',
-                'REGISTRAR'
+                'REGISTRAR',
+                'STUDENT SECTION'
             ])
             ->middleware([
                 EncryptCookies::class,

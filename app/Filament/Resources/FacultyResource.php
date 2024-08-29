@@ -16,6 +16,7 @@ use Filament\Resources\Forms\Components\TextInput;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use App\Models\User;
 
 class FacultyResource extends Resource
 {
@@ -31,15 +32,24 @@ class FacultyResource extends Resource
             ->schema([
                 Grid::make(1)->schema([ 
                     Select::make('user_id')
-                    ->label('Name')
-                    ->required() 
-                    ->native(false)
-                    ->relationship('user', 'name', function ($query) {
-                        $query->teachers();
-                    }),
-                ]),
-                Select::make('semester_id') -> label('Semester')->required() ->relationship('semester', 'name',) ->native(false),
-                Select::make('department_id') -> label('Department')->required() ->relationship('department', 'description') ->native(false)
+                        ->label('Name')
+                        ->required() 
+                        ->native(false)
+                        ->relationship('user', 'name', function ($query) {
+                            $query->teachers();
+                        }),
+                    ]),
+                    Select::make('semester_id') 
+                        -> label('Semester')
+                        ->required() 
+                        ->relationship('semester', 'name',) 
+                        ->native(false),
+
+                    Select::make('department_id') 
+                        -> label('Department')
+                        ->required() 
+                        ->relationship('department', 'description') 
+                        ->native(false)
             ]);
     }
 
@@ -47,19 +57,39 @@ class FacultyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn:: make('name')->label('USER NAME') -> searchable(),
-                TextColumn:: make('full_name')->label('FULL NAME') -> searchable(),
-                TextColumn:: make('email') ->icon('heroicon-m-envelope')->label('EMAIL')->copyable()->copyMessage('Copied!')->copyMessageDuration(1500),
-                TextColumn:: make('status') ->label('STATUS') -> badge(),
-                TextColumn:: make('semester_name')->label('SEMESTER') -> searchable(),
-                TextColumn:: make('department_name')->label('DEPARTMENT') -> searchable(),
+                TextColumn:: make('name')
+                    ->label('USER NAME') 
+                    -> searchable(),
+
+                TextColumn:: make('full_name')
+                    ->label('FULL NAME') 
+                    -> searchable(),
+
+                TextColumn:: make('email') 
+                    ->icon('heroicon-m-envelope')
+                    ->label('EMAIL')->copyable()
+                    ->copyMessage('Copied!')
+                    ->copyMessageDuration(1500),
+
+                TextColumn:: make('status') 
+                    ->label('STATUS') 
+                    -> badge(),
+
+                TextColumn:: make('semester_name')
+                    ->label('SEMESTER') 
+                    -> searchable(),
+
+                TextColumn:: make('department_name')
+                    ->label('DEPARTMENT') 
+                    -> searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn () => auth()->user()->isAdmin()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

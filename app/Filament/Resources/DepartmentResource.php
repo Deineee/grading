@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Grid;
+use App\Models\User;
 
 class DepartmentResource extends Resource
 {
@@ -29,8 +30,11 @@ class DepartmentResource extends Resource
         return $form
             ->schema([
                 Grid::make(1)->schema([
-                TextInput::make('department')->required(),
-                TextInput::make('description') ->required(),
+                TextInput::make('department')
+                    ->required(),
+
+                TextInput::make('description') 
+                    ->required(),
                 ]),
             ]);
     }
@@ -39,20 +43,25 @@ class DepartmentResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn:: make('department')->label('DEPARTMENT')-> searchable(),
-                TextColumn:: make('description')->label('DESCRIPTION')-> searchable(),
+                TextColumn:: make('department')
+                    ->label('DEPARTMENT')
+                    -> searchable(),
+                TextColumn:: make('description')
+                    ->label('DESCRIPTION')
+                    -> searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn () => auth()->user()->isAdmin()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ]),      
             ]);
     }
 

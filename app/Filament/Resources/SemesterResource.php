@@ -18,6 +18,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Grid;
+use App\Models\User;
 
 class SemesterResource extends Resource
 {
@@ -32,20 +33,34 @@ class SemesterResource extends Resource
         return $form
             ->schema([
                 Grid::make(1)->schema([
-                    TextInput::make('name')->required(),
-                    TextInput::make('school_name') ->required(),
-                    TextInput::make('school_id') ->required(),
-                    DatePicker::make('start_date') ->native(false) ->displayFormat('d/m/Y') ->required(),
-                    DatePicker::make('end_date') ->native(false) ->displayFormat('d/m/Y') ->required(),
+                    TextInput::make('name')
+                        ->required(),
+
+                    TextInput::make('school_name') 
+                        ->required(),
+
+                    TextInput::make('school_id') 
+                        ->required(),
+
+                    DatePicker::make('start_date') 
+                        ->native(false)
+                        ->displayFormat('d/m/Y') 
+                        ->required(),
+
+                    DatePicker::make('end_date') 
+                        ->native(false) 
+                        ->displayFormat('d/m/Y') 
+                        ->required(),
+
                     Select::make('status')
-                    ->label('Status')
-                    ->options([
-                        'active' => 'Active',
-                        'inactive' => 'Inactive',
-                        'completed' => 'Completed'
-                    ])
-                    ->visibleOn('edit')
-                    ->native(false),
+                        ->label('Status')
+                        ->options([
+                            'active' => 'Active',
+                            'inactive' => 'Inactive',
+                            'completed' => 'Completed'
+                        ])
+                        ->visibleOn('edit')
+                        ->native(false),
                     ]),    
             ]);
     }
@@ -54,27 +69,40 @@ class SemesterResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn:: make('name')->label('NAME') -> searchable(),
-                TextColumn:: make('school_name')->label('SCHOOL NAME') -> searchable(),
+                TextColumn:: make('name')
+                    ->label('NAME') 
+                    -> searchable(),
+
+                TextColumn:: make('school_name')
+                    ->label('SCHOOL NAME') 
+                    -> searchable(),
+
                 TextColumn::make('school_year')
-                ->label('SCHOOL YEAR')
-                ->getStateUsing(function ($record) {
-                    return $record->start_date->format('d/m/Y') . ' - ' . $record->end_date->format('d/m/Y');
-                }),
-                TextColumn:: make('school_id') ->label('SCHOOL ID') -> searchable(),
-                TextColumn::make('status') ->label('STATUS') ->badge()
-                ->colors([
-                    'primary' => 'active',
-                    'secondary' => 'inactive',
-                    'success' => 'completed',
-                ]),
+                    ->label('SCHOOL YEAR')
+                    ->getStateUsing(function ($record) {
+                        return $record->start_date->format('d/m/Y') . ' - ' . $record->end_date->format('d/m/Y');
+                    }),
+
+                TextColumn:: make('school_id') 
+                    ->label('SCHOOL ID') 
+                    -> searchable(),
+
+                TextColumn::make('status') 
+                    ->label('STATUS') 
+                    ->badge()
+                    ->colors([
+                        'primary' => 'active',
+                        'secondary' => 'inactive',
+                        'success' => 'completed',
+                    ]),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn () => auth()->user()->isAdmin()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

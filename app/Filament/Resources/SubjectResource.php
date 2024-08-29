@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\MultiSelect;
+use Filament\Tables\Columns\TextColumn;
+use App\Models\User;
 
 class SubjectResource extends Resource
 {
@@ -29,10 +32,43 @@ class SubjectResource extends Resource
         return $form
             ->schema([
                 Grid::make(1)->schema([
-                    TextInput::make('subject_name')->required(),
-                    TextInput::make('subject_description') ->required(),
-                    TextInput::make('subject_code') ->required(),
-                    TextInput::make('credits') ->required() ->numeric()  ->maxValue(10),
+                    TextInput::make('subject_name')
+                        ->label('Subject Name')
+                        ->required(),
+                    
+                    TextInput::make('subject_code')
+                        ->label('Subject Code')
+                        ->unique(ignoreRecord: true)
+                        ->required(),
+
+                    Select::make('user_id')
+                        ->label('Teacher')
+                        ->required() 
+                        ->native(false)
+                        ->relationship('user', 'name', function ($query) {
+                            $query->teachers();
+                        }),
+
+                    TextInput::make('subject_description') 
+                        ->label('Subject Description'),
+                    
+                    MultiSelect::make('prerequisite_subjects')
+                        ->label('Prerequisite Subjects')
+                        ->relationship('prerequisites', 'subject_name')
+                        ->native(false)
+                        ->nullable(),
+
+                    TextInput::make('credits') 
+                        ->required() 
+                        ->numeric()  
+                        ->maxValue(10) 
+                        ->label('Credits'),
+
+                    Select::make('department_id') 
+                        -> label('Department')
+                        ->required() 
+                        ->relationship('department', 'description') 
+                        ->native(false)
                     ]),
             ]);
 
@@ -42,7 +78,26 @@ class SubjectResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('subject_name')
+                    ->label('Subject Name')
+                    ->sortable(),
+
+                TextColumn::make('subject_code')
+                    ->label('Subject Code')
+                    ->sortable(),
+
+                TextColumn::make('credits')
+                    ->label('Credits')
+                    ->sortable(),
+
+                TextColumn::make('prerequisites')
+                    ->label('Prerequisites')
+                    ->getStateUsing(function ($record) {
+                        // Fetch the prerequisite subjects related to the current subject
+                        return $record->prerequisites->pluck('subject_name')->join(', ');
+                    })
+                    ->sortable(),
+                
             ])
             ->filters([
                 //
