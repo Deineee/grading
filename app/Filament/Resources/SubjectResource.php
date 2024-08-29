@@ -17,7 +17,6 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\MultiSelect;
 use Filament\Tables\Columns\TextColumn;
-use App\Models\User;
 
 class SubjectResource extends Resource
 {

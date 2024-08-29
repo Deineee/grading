@@ -16,7 +16,7 @@ use Filament\Resources\Forms\Components\TextInput;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
-use App\Models\User;
+
 
 class FacultyResource extends Resource
 {
@@ -24,7 +24,7 @@ class FacultyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'DEPARTMENT SECTION';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -38,7 +38,6 @@ class FacultyResource extends Resource
                         ->relationship('user', 'name', function ($query) {
                             $query->teachers();
                         }),
-                    ]),
                     Select::make('semester_id') 
                         -> label('Semester')
                         ->required() 
@@ -50,6 +49,7 @@ class FacultyResource extends Resource
                         ->required() 
                         ->relationship('department', 'description') 
                         ->native(false)
+                    ]),
             ]);
     }
 
@@ -61,7 +61,7 @@ class FacultyResource extends Resource
                     ->label('USER NAME') 
                     -> searchable(),
 
-                TextColumn:: make('full_name')
+                TextColumn:: make('user.full_name')
                     ->label('FULL NAME') 
                     -> searchable(),
 
