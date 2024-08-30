@@ -13,9 +13,6 @@ return new class extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id(); // Primary key
-
-            // Foreign key referencing the 'departments' table
-            $table->foreignId('department_id')->constrained('department')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             
             // Course details
