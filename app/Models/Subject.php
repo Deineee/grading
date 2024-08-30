@@ -17,13 +17,9 @@ class Subject extends Model
         'subject_name',
         'subject_description',
         'subject_code',
-        'credits'
+        'credits',
+        'program_id'
     ];
-
-    public function department()
-    {
-        return $this->belongsTo(Department::class);
-    }
 
     // Relationship to prerequisite subjects
     // Use this method when you want to find all the prerequisite subjects for a given subject.
@@ -48,7 +44,5 @@ class Subject extends Model
     {
         return $this->belongsTo(Program::class);
     }
-
-
 
 }

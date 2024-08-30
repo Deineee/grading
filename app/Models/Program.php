@@ -19,6 +19,7 @@ class Program extends Model
     protected $fillable = [
         'program_name',
         'program_description',
+        'department_id',
     ];
 
     // A program has many subjects

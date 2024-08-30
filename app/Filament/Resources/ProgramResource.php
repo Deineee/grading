@@ -16,6 +16,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 
 class ProgramResource extends Resource
 {
@@ -35,8 +36,9 @@ class ProgramResource extends Resource
                     TextInput::make('program_name')
                         ->required(),
                     
-                    TextInput::make('program_description')
-                        ->required(),
+                    Textarea::make('program_description')
+                        ->required()
+                        ->rows(5),
 
                     Select::make('department_id') 
                         -> label('Department')
@@ -51,7 +53,17 @@ class ProgramResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('program_name')
+                    ->label('Program Name')
+                    ->searchable(),
+                
+                TextColumn::make('program_description')
+                    ->label('Description')
+                    ->limit(25),
+
+                TextColumn::make('department.description')
+                    ->label('Department')
+                    ->sortable(),
             ])
             ->filters([
                 //

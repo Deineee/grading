@@ -64,10 +64,10 @@ class SubjectResource extends Resource
                         ->maxValue(10) 
                         ->label('Credits'),
 
-                    Select::make('department_id') 
-                        -> label('Department')
+                    Select::make('program_id') 
+                        -> label('Program')
                         ->required() 
-                        ->relationship('department', 'description') 
+                        ->relationship('program', 'program_name') 
                         ->native(false)
                     ]),
             ]);
@@ -99,7 +99,9 @@ class SubjectResource extends Resource
                         // Fetch the prerequisite subjects related to the current subject
                         return $record->prerequisites->pluck('subject_name')->join(', ');
                     }),
-                
+
+                TextColumn::make('program.program_name')
+                    ->label('Program'),
             ])
             ->filters([
                 //
