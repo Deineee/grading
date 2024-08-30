@@ -18,9 +18,7 @@ return new class extends Migration
             $table->string('student_number')->unique()->nullable();
             $table->string('year_level')->nullable();
             $table->foreignId('program_id')->constrained('programs')->onDelete('cascade');
-            
-            // Foreign key referencing the 'departments' table
-            $table->foreignId('department_id')->constrained('department')->onDelete('cascade');
+    
             $table->string('section')->nullable();
 
             // Additional details

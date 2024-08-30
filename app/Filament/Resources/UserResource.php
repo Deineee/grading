@@ -54,7 +54,8 @@ class UserResource extends Resource
                     ->required()
                     ->options(User::ROLES)
                     ->native(false),
-                    Radio::make('status')
+
+                Radio::make('status')
                         ->options(array_combine(
                             array_map(fn(UserStatus $status) => $status->value, UserStatus::cases()),
                             array_map(fn(UserStatus $status) => $status->getLabel(), UserStatus::cases())

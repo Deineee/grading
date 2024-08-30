@@ -58,7 +58,7 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Scope a query to only include teachers.
+     * Scope a query to only include teacher role.
      *
      * @param  Builder  $query
      * @return Builder
@@ -67,6 +67,18 @@ class User extends Authenticatable implements FilamentUser
     {
         return $query->where('role', self::ROLE_TEACHER);
     }
+
+    /**
+     * Scope a query to only include student role.
+     *
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function scopeStudents($query)
+    {
+        return $query->where('role', self::ROLE_STUDENT);
+    }
+
 
     /**
      * The attributes that are mass assignable.
